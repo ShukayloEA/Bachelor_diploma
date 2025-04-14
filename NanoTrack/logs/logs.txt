@@ -1,0 +1,478 @@
+[2025-03-19 16:02:56,831-rk0-train.py#263] Version Information: 
+commit : 
+  log  : 
+
+[2025-03-19 16:03:22,653-rk0-train.py#264] config 
+{
+    "META_ARC": "nanotrack",
+    "CUDA": true,
+    "TRAIN": {
+        "NEG_NUM": 16,
+        "POS_NUM": 16,
+        "TOTAL_NUM": 64,
+        "EXEMPLAR_SIZE": 127,
+        "SEARCH_SIZE": 255,
+        "BASE_SIZE": 7,
+        "OUTPUT_SIZE": 16,
+        "RESUME": "",
+        "PRETRAINED": "",
+        "LOG_DIR": "./logs",
+        "SNAPSHOT_DIR": "./models/snapshot",
+        "EPOCH": 50,
+        "START_EPOCH": 0,
+        "NUM_CONVS": 4,
+        "BATCH_SIZE": 32,
+        "NUM_WORKERS": 8,
+        "MOMENTUM": 0.9,
+        "WEIGHT_DECAY": 0.0001,
+        "CLS_WEIGHT": 1.0,
+        "LOC_WEIGHT": 1.0,
+        "PRINT_FREQ": 20,
+        "LOG_GRADS": false,
+        "GRAD_CLIP": 10.0,
+        "BASE_LR": 0.005,
+        "LR": {
+            "TYPE": "log",
+            "KWARGS": {
+                "start_lr": 0.005,
+                "end_lr": 0.0005
+            }
+        },
+        "LR_WARMUP": {
+            "WARMUP": true,
+            "TYPE": "step",
+            "EPOCH": 5,
+            "KWARGS": {
+                "start_lr": 0.001,
+                "end_lr": 0.005,
+                "step": 1
+            }
+        }
+    },
+    "MASK": {
+        "MASK": false
+    },
+    "DATASET": {
+        "TEMPLATE": {
+            "SHIFT": 4,
+            "SCALE": 0.05,
+            "BLUR": 0.0,
+            "FLIP": 0.0,
+            "COLOR": 1.0
+        },
+        "SEARCH": {
+            "SHIFT": 64,
+            "SCALE": 0.18,
+            "BLUR": 0.2,
+            "FLIP": 0.0,
+            "COLOR": 1.0
+        },
+        "NEG": 0.2,
+        "GRAY": 0.0,
+        "NAMES": [
+            "GOT"
+        ],
+        "VID": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "YOUTUBEBB": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 3,
+            "NUM_USE": 100000
+        },
+        "COCO": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 1,
+            "NUM_USE": 100000
+        },
+        "DET": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 1,
+            "NUM_USE": 100000
+        },
+        "GOT": {
+            "ROOT": "data/GOT-10k/crop511",
+            "ANNO": "data/GOT-10k/train.json",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "LASOT": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "VIDEOS_PER_EPOCH": 100000
+    },
+    "BACKBONE": {
+        "TYPE": "mobilenetv3_small",
+        "KWARGS": {
+            "used_layers": [
+                4
+            ]
+        },
+        "PRETRAINED": "./models/pretrained/mobilenetv3_small_1.0.pth",
+        "TRAIN_LAYERS": [
+            "features"
+        ],
+        "LAYERS_LR": 0.1,
+        "TRAIN_EPOCH": 10
+    },
+    "ADJUST": {
+        "ADJUST": true,
+        "KWARGS": {
+            "in_channels": 64,
+            "out_channels": 64
+        },
+        "TYPE": "AdjustLayer"
+    },
+    "BAN": {
+        "BAN": true,
+        "TYPE": "DepthwiseBAN",
+        "KWARGS": {
+            "in_channels": 64,
+            "out_channels": 64
+        }
+    },
+    "POINT": {
+        "STRIDE": 16
+    },
+    "TRACK": {
+        "TYPE": "NanoTracker",
+        "PENALTY_K": 0.148,
+        "WINDOW_INFLUENCE": 0.462,
+        "LR": 0.39,
+        "EXEMPLAR_SIZE": 127,
+        "INSTANCE_SIZE": 255,
+        "BASE_SIZE": 7,
+        "OUTPUT_SIZE": 16,
+        "CONTEXT_AMOUNT": 0.5
+    }
+}
+[2025-03-19 16:06:17,126-rk0-train.py#263] Version Information: 
+commit : 
+  log  : 
+
+[2025-03-19 16:06:21,389-rk0-train.py#264] config 
+{
+    "META_ARC": "nanotrack",
+    "CUDA": false,
+    "TRAIN": {
+        "NEG_NUM": 16,
+        "POS_NUM": 16,
+        "TOTAL_NUM": 64,
+        "EXEMPLAR_SIZE": 127,
+        "SEARCH_SIZE": 255,
+        "BASE_SIZE": 7,
+        "OUTPUT_SIZE": 16,
+        "RESUME": "",
+        "PRETRAINED": "",
+        "LOG_DIR": "./logs",
+        "SNAPSHOT_DIR": "./models/snapshot",
+        "EPOCH": 1,
+        "START_EPOCH": 0,
+        "NUM_CONVS": 4,
+        "BATCH_SIZE": 32,
+        "NUM_WORKERS": 8,
+        "MOMENTUM": 0.9,
+        "WEIGHT_DECAY": 0.0001,
+        "CLS_WEIGHT": 1.0,
+        "LOC_WEIGHT": 1.0,
+        "PRINT_FREQ": 20,
+        "LOG_GRADS": false,
+        "GRAD_CLIP": 10.0,
+        "BASE_LR": 0.005,
+        "LR": {
+            "TYPE": "log",
+            "KWARGS": {
+                "start_lr": 0.005,
+                "end_lr": 0.0005
+            }
+        },
+        "LR_WARMUP": {
+            "WARMUP": true,
+            "TYPE": "step",
+            "EPOCH": 5,
+            "KWARGS": {
+                "start_lr": 0.001,
+                "end_lr": 0.005,
+                "step": 1
+            }
+        }
+    },
+    "MASK": {
+        "MASK": false
+    },
+    "DATASET": {
+        "TEMPLATE": {
+            "SHIFT": 4,
+            "SCALE": 0.05,
+            "BLUR": 0.0,
+            "FLIP": 0.0,
+            "COLOR": 1.0
+        },
+        "SEARCH": {
+            "SHIFT": 64,
+            "SCALE": 0.18,
+            "BLUR": 0.2,
+            "FLIP": 0.0,
+            "COLOR": 1.0
+        },
+        "NEG": 0.2,
+        "GRAY": 0.0,
+        "NAMES": [
+            "GOT"
+        ],
+        "VID": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "YOUTUBEBB": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 3,
+            "NUM_USE": 100000
+        },
+        "COCO": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 1,
+            "NUM_USE": 100000
+        },
+        "DET": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 1,
+            "NUM_USE": 100000
+        },
+        "GOT": {
+            "ROOT": "data/GOT-10k/crop511",
+            "ANNO": "data/GOT-10k/train.json",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "LASOT": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "VIDEOS_PER_EPOCH": 10
+    },
+    "BACKBONE": {
+        "TYPE": "mobilenetv3_small",
+        "KWARGS": {
+            "used_layers": [
+                4
+            ]
+        },
+        "PRETRAINED": "./models/pretrained/mobilenetv3_small_1.0.pth",
+        "TRAIN_LAYERS": [
+            "features"
+        ],
+        "LAYERS_LR": 0.1,
+        "TRAIN_EPOCH": 10
+    },
+    "ADJUST": {
+        "ADJUST": true,
+        "KWARGS": {
+            "in_channels": 64,
+            "out_channels": 64
+        },
+        "TYPE": "AdjustLayer"
+    },
+    "BAN": {
+        "BAN": true,
+        "TYPE": "DepthwiseBAN",
+        "KWARGS": {
+            "in_channels": 64,
+            "out_channels": 64
+        }
+    },
+    "POINT": {
+        "STRIDE": 16
+    },
+    "TRACK": {
+        "TYPE": "NanoTracker",
+        "PENALTY_K": 0.148,
+        "WINDOW_INFLUENCE": 0.462,
+        "LR": 0.39,
+        "EXEMPLAR_SIZE": 127,
+        "INSTANCE_SIZE": 255,
+        "BASE_SIZE": 7,
+        "OUTPUT_SIZE": 16,
+        "CONTEXT_AMOUNT": 0.5
+    }
+}
+[2025-03-19 16:07:13,205-rk0-train.py#263] Version Information: 
+commit : 
+  log  : 
+
+[2025-03-19 16:07:22,416-rk0-train.py#264] config 
+{
+    "META_ARC": "nanotrack",
+    "CUDA": false,
+    "TRAIN": {
+        "NEG_NUM": 16,
+        "POS_NUM": 16,
+        "TOTAL_NUM": 64,
+        "EXEMPLAR_SIZE": 127,
+        "SEARCH_SIZE": 255,
+        "BASE_SIZE": 7,
+        "OUTPUT_SIZE": 16,
+        "RESUME": "",
+        "PRETRAINED": "",
+        "LOG_DIR": "./logs",
+        "SNAPSHOT_DIR": "./models/snapshot",
+        "EPOCH": 1,
+        "START_EPOCH": 0,
+        "NUM_CONVS": 4,
+        "BATCH_SIZE": 32,
+        "NUM_WORKERS": 8,
+        "MOMENTUM": 0.9,
+        "WEIGHT_DECAY": 0.0001,
+        "CLS_WEIGHT": 1.0,
+        "LOC_WEIGHT": 1.0,
+        "PRINT_FREQ": 20,
+        "LOG_GRADS": false,
+        "GRAD_CLIP": 10.0,
+        "BASE_LR": 0.005,
+        "LR": {
+            "TYPE": "log",
+            "KWARGS": {
+                "start_lr": 0.005,
+                "end_lr": 0.0005
+            }
+        },
+        "LR_WARMUP": {
+            "WARMUP": true,
+            "TYPE": "step",
+            "EPOCH": 5,
+            "KWARGS": {
+                "start_lr": 0.001,
+                "end_lr": 0.005,
+                "step": 1
+            }
+        }
+    },
+    "MASK": {
+        "MASK": false
+    },
+    "DATASET": {
+        "TEMPLATE": {
+            "SHIFT": 4,
+            "SCALE": 0.05,
+            "BLUR": 0.0,
+            "FLIP": 0.0,
+            "COLOR": 1.0
+        },
+        "SEARCH": {
+            "SHIFT": 64,
+            "SCALE": 0.18,
+            "BLUR": 0.2,
+            "FLIP": 0.0,
+            "COLOR": 1.0
+        },
+        "NEG": 0.2,
+        "GRAY": 0.0,
+        "NAMES": [
+            "GOT"
+        ],
+        "VID": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "YOUTUBEBB": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 3,
+            "NUM_USE": 100000
+        },
+        "COCO": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 1,
+            "NUM_USE": 100000
+        },
+        "DET": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 1,
+            "NUM_USE": 100000
+        },
+        "GOT": {
+            "ROOT": "data/GOT-10k/crop511",
+            "ANNO": "data/GOT-10k/train.json",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "LASOT": {
+            "ROOT": "",
+            "ANNO": "",
+            "FRAME_RANGE": 100,
+            "NUM_USE": 100000
+        },
+        "VIDEOS_PER_EPOCH": 10
+    },
+    "BACKBONE": {
+        "TYPE": "mobilenetv3_small",
+        "KWARGS": {
+            "used_layers": [
+                4
+            ]
+        },
+        "PRETRAINED": "./models/pretrained/mobilenetv3_small_1.0.pth",
+        "TRAIN_LAYERS": [
+            "features"
+        ],
+        "LAYERS_LR": 0.1,
+        "TRAIN_EPOCH": 10
+    },
+    "ADJUST": {
+        "ADJUST": true,
+        "KWARGS": {
+            "in_channels": 64,
+            "out_channels": 64
+        },
+        "TYPE": "AdjustLayer"
+    },
+    "BAN": {
+        "BAN": true,
+        "TYPE": "DepthwiseBAN",
+        "KWARGS": {
+            "in_channels": 64,
+            "out_channels": 64
+        }
+    },
+    "POINT": {
+        "STRIDE": 16
+    },
+    "TRACK": {
+        "TYPE": "NanoTracker",
+        "PENALTY_K": 0.148,
+        "WINDOW_INFLUENCE": 0.462,
+        "LR": 0.39,
+        "EXEMPLAR_SIZE": 127,
+        "INSTANCE_SIZE": 255,
+        "BASE_SIZE": 7,
+        "OUTPUT_SIZE": 16,
+        "CONTEXT_AMOUNT": 0.5
+    }
+}
+[2025-03-19 16:07:28,943-rk0-model_load.py# 44] load pretrained model from C:\Diploma\SiamTrackers\NanoTrack\bin\.././models/pretrained/mobilenetv3_small_1.0.pth
+[2025-03-19 16:07:28,970-rk0-model_load.py# 39] remove prefix 'module.'
+[2025-03-19 16:07:28,972-rk0-model_load.py# 27] [Warning] unused_pretrained_keys: {'features.9.conv.8.num_batches_tracked', 'features.9.conv.1.bias', 'features.9.conv.7.weight', 'features.10.conv.4.bias', 'features.10.conv.4.running_mean', 'conv.0.weight', 'features.10.conv.7.weight', 'features.11.conv.1.bias', 'features.9.conv.0.weight', 'features.10.conv.1.weight', 'features.11.conv.4.running_mean', 'features.10.conv.8.running_var', 'features.9.conv.1.weight', 'features.9.conv.1.running_var', 'features.11.conv.5.fc.0.bias', 'conv.1.running_mean', 'features.9.conv.4.running_var', 'features.11.conv.8.running_var', 'features.9.conv.1.running_mean', 'features.9.conv.5.fc.0.weight', 'features.10.conv.4.num_batches_tracked', 'features.11.conv.8.running_mean', 'classifier.0.weight', 'features.11.conv.8.weight', 'features.10.conv.0.weight', 'features.11.conv.5.fc.2.bias', 'classifier.0.bias', 'features.11.conv.4.bias', 'features.11.conv.1.weight', 'features.11.conv.0.weight', 'classifier.3.bias', 'features.11.conv.4.running_var', 'features.9.conv.4.running_mean', 'features.10.conv.1.num_batches_tracked', 'features.10.conv.5.fc.2.weight', 'features.9.conv.8.running_mean', 'features.11.conv.1.running_var', 'features.9.conv.8.weight', 'features.10.conv.8.num_batches_tracked', 'features.9.conv.8.running_var', 'features.9.conv.8.bias', 'features.11.conv.1.running_mean', 'features.10.conv.8.weight', 'features.9.conv.5.fc.0.bias', 'features.11.conv.5.fc.2.weight', 'conv.1.num_batches_tracked', 'features.10.conv.1.running_mean', 'features.11.conv.3.weight', 'features.10.conv.3.weight', 'conv.1.running_var', 'features.10.conv.1.bias', 'features.9.conv.5.fc.2.bias', 'features.11.conv.1.num_batches_tracked', 'features.11.conv.4.num_batches_tracked', 'features.9.conv.3.weight', 'features.9.conv.4.bias', 'conv.1.weight', 'features.10.conv.4.running_var', 'features.9.conv.1.num_batches_tracked', 'features.9.conv.4.weight', 'features.11.conv.8.num_batches_tracked', 'features.11.conv.4.weight', 'features.11.conv.7.weight', 'features.10.conv.5.fc.2.bias', 'features.9.conv.4.num_batches_tracked', 'features.10.conv.8.running_mean', 'features.10.conv.5.fc.0.weight', 'features.10.conv.4.weight', 'conv.1.bias', 'classifier.3.weight', 'features.10.conv.5.fc.0.bias', 'features.11.conv.5.fc.0.weight', 'features.10.conv.8.bias', 'features.11.conv.8.bias', 'features.9.conv.5.fc.2.weight', 'features.10.conv.1.running_var'}
+[2025-03-19 16:07:28,973-rk0-model_load.py# 29] unused checkpoint keys:76
+[2025-03-19 16:07:28,973-rk0-model_load.py# 31] used keys:168
+[2025-03-19 16:07:35,601-rk0-train.py# 57] build train dataset
+[2025-03-19 16:07:35,603-rk0-dataset.py# 39] loading GOT
