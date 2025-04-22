@@ -13,7 +13,7 @@
             "cwd": "${workspaceFolder}\\NanoTrack\\", 
             "justMyCode": false,
             "args": [
-                "--vis",
+                "--vis", "--fov", "81.9",
             ]
         }
     ]

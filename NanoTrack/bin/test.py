@@ -29,8 +29,7 @@ from toolkit.utils.region import vot_overlap, vot_float2str
 
 from bin.eval import eval
 
-from openvino.runtime import Core
-ie = Core()
+from angular_offset import calculate_angular_offset, calculate_fov
 
 parser = argparse.ArgumentParser(description='nanotrack') 
 
@@ -46,7 +45,9 @@ parser.add_argument('--save_path', default='./results', type=str, help='snapshot
 
 parser.add_argument('--video', default='', type=str,  help='eval one special video')
 
-parser.add_argument('--vis', action='store_true',help='whether v isualzie result')
+parser.add_argument('--fov', default=46, type=float, help='fov of drone camera')
+
+parser.add_argument('--vis', action='store_true',help='whether visualize result')
 
 parser.add_argument('--gpu_id', default='not_set', type=str, help="gpu id") 
 
@@ -55,6 +56,7 @@ parser.add_argument('--tracker_path', '-p', default='./results', type=str,help='
 parser.add_argument('--num', '-n', default=4, type=int,help='number of thread to eval')
 
 parser.add_argument('--show_video_level', '-s', dest='show_video_level',action='store_true')
+
 
 parser.set_defaults(show_video_level=False)
 
@@ -187,8 +189,11 @@ def main():
                     continue
             toc = 0
             pred_bboxes = []
+            angular_offsets = []
             scores = []
             track_times = []
+            
+            fov_h, fov_v = calculate_fov(args.fov, video.width, video.height)
             for idx, (img, gt_bbox) in enumerate(video):
                 tic = cv2.getTickCount()
                 if idx == 0:
@@ -208,6 +213,10 @@ def main():
                     #scores.append(outputs['best_score'])  
                 toc += cv2.getTickCount() - tic
                 track_times.append((cv2.getTickCount() - tic)/cv2.getTickFrequency())
+
+                angular_offset = calculate_angular_offset(cx, cy, video.width, video.height, fov_h, fov_v)
+                angular_offsets.append(angular_offset)
+
                 if idx == 0:
                     cv2.destroyAllWindows()
                 if args.vis and idx > 0: 
@@ -271,6 +280,16 @@ def main():
                         frame += 1
                         f.write(','.join([str(i) for i in x]))   
                         f.write(',1\n')
+                
+                result_path = os.path.join(model_path, '{}_angular_offsets.txt'.format(video.name))
+                with open(result_path, 'w') as f:
+                    frame = 1
+                    for x in angular_offsets:
+                        f.write(str(frame))
+                        f.write(',')
+                        frame += 1
+                        f.write(','.join([str(i) for i in x]))   
+                        f.write('\n')
     #eval(args)   
 
 if __name__ == '__main__':
