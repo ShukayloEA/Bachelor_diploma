@@ -29,7 +29,7 @@ from toolkit.utils.region import vot_overlap, vot_float2str
 
 from bin.eval import eval
 
-from angular_offset import calculate_angular_offset, calculate_fov
+from angular_offset import calculate_angular_offset, calculate_vertical_fov
 
 parser = argparse.ArgumentParser(description='nanotrack') 
 
@@ -193,7 +193,8 @@ def main():
             scores = []
             track_times = []
             
-            fov_h, fov_v = calculate_fov(args.fov, video.width, video.height)
+            fov_h = args.fov #horisontal
+            fov_v = calculate_vertical_fov(fov_h, video.width/video.height) #vertical
             for idx, (img, gt_bbox) in enumerate(video):
                 tic = cv2.getTickCount()
                 if idx == 0:

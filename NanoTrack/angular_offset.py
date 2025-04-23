@@ -38,8 +38,8 @@ def calculate_angular_offset(x, y, image_width, image_height, fov_h, fov_v):
     dx = x - cx
     dy = y - cy
 
-    angle_x = (dx / image_width) * fov_h
-    angle_y = (dy / image_height) * fov_v
+    angle_x = (dx / (image_width/2)) * (fov_h/2)
+    angle_y = (dy / (image_height/2)) * (fov_v/2)
 
     return math.radians(angle_x), math.radians(angle_y)
 
