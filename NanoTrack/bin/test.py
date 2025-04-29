@@ -19,10 +19,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from tqdm import tqdm 
 
-import onnx
-import onnxruntime
+#import onnx
+#import onnxruntime
+import tensorflow as tf
 
-from nanotrack.models.onnx_wrapper import ONNXWrapper
+#from nanotrack.models.onnx_wrapper import ONNXWrapper
+from nanotrack.models.tflite_wrapper import TFLiteWrapper
 from nanotrack.core.config import cfg
 from nanotrack.models.model_builder import ModelBuilder
 from nanotrack.tracker.tracker_builder import build_tracker
@@ -73,23 +75,16 @@ if args.gpu_id != 'not_set':
 torch.set_num_threads(1)  
 
 def main(): 
+    '''
     onnx_model_path = "./models/nanotrack_full.onnx"
     onnx_model = onnx.load(onnx_model_path)
     onnx.checker.check_model(onnx_model)
-    
-    '''
-    print("Inputs:")
-    for input in onnx_model.graph.input:
-        print(f"  {input.name} : {input.type}")
-
-    print("\nOutputs:")
-    for output in onnx_model.graph.output:
-        print(f"  {output.name} : {output.type}")
-
-    '''
 
     session = ONNXWrapper(onnx_model_path)
-    
+    '''
+    tflite_model_path="./models/nanotrack_model.tflite"
+    tflite_model = TFLiteWrapper(tflite_model_path)
+
     cfg.merge_from_file(args.config) 
 
     dataset_root = os.path.join('./datasets', args.dataset) 
@@ -118,7 +113,7 @@ def main():
 
     # build tracker 
     #tracker = build_tracker(model)
-    tracker = build_tracker(session)
+    tracker = build_tracker(tflite_model)
 
     # create dataset 
     dataset = DatasetFactory.create_dataset(name=args.dataset,  

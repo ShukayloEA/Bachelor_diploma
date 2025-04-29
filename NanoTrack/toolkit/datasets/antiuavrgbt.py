@@ -42,7 +42,7 @@ class AntiUAVRGBTDataset(Dataset):
         self._check_integrity(dataset_root)
 
         self.anno_files = sorted(glob.glob(
-            os.path.join(dataset_root, '*/visible/gt_visible.txt')))
+            os.path.join(dataset_root, '*/infrared/gt_infrared.txt')))
         self.seq_dirs = [os.path.dirname(f) for f in self.anno_files]
         self.seq_names = [os.path.basename(d) for d in self.seq_dirs]
         
