@@ -24,7 +24,7 @@ class NanoTracker(SiameseTracker):
         
         self.points = self.generate_points(cfg.POINT.STRIDE, self.score_size)
         self.model = model
-        self.model.eval()
+        #self.model.eval()
 
     def generate_points(self, stride, size):
         ori = - (size // 2) * stride

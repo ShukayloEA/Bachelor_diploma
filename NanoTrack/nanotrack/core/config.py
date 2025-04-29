@@ -174,7 +174,7 @@ __C.DATASET.VIDEOS_PER_EPOCH = 600000
 # ------------------------------------------------------------------------ #
 __C.BACKBONE = CN()
 
-__C.BACKBONE.TYPE = 'res50'
+__C.BACKBONE.TYPE = 'mobilenetv3_small_v3'
 
 __C.BACKBONE.KWARGS = CN(new_allowed=True)
 

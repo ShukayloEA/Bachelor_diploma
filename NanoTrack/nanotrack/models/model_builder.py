@@ -99,4 +99,10 @@ class ModelBuilder(nn.Module):
                     'cls': cls,
                     'loc': loc,
                 }
+    
+    def forward_onnx(self, template, search):
+        zf = self.backbone(template)
+        xf = self.backbone(search)
+        cls, loc = self.ban_head(zf, xf)
+        return cls, loc
 

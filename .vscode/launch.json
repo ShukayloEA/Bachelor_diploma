@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}\\NanoTrack\\", 
+            "cwd": "C:\\Users\\Aila\\Bachelor_diploma\\NanoTrack\\",//"${workspaceFolder}\\NanoTrack\\", 
             "justMyCode": false,
             "args": [
                 "--vis", "--fov", "81.9",
