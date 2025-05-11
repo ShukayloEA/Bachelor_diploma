@@ -3,6 +3,9 @@ from __future__ import division, print_function, absolute_import
 
 import argparse
 import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import cv2
 import numpy as np
@@ -20,6 +23,7 @@ import time
 from yolov5.models.common import DetectMultiBackend
 
 import torchvision.models as models
+from angular_offset import calculate_angular_offset, calculate_vertical_fov
 
 from openvino.runtime import Core
 ie = Core()
@@ -34,8 +38,8 @@ weights_path_ir = "exp18\\weights\\best_openvino_model\\best.xml"
 #model_ir = torch.load(weights_path_ir, map_location="cpu", weights_only=False)
 model_ir = ie.compile_model(weights_path_ir, "CPU")
 model_rgb = ie.compile_model(weights_path_rgb, "CPU")
-device = 'cpu'
-#device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+#device = 'cpu'
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #model_rgb = DetectMultiBackend(weights_path_rgb, device=device)
 #model_ir = DetectMultiBackend(weights_path_ir, device=device)
 #model_rgb = torch.hub.load('ultralytics/yolov5', 'custom', path=weights_path_rgb)
@@ -243,7 +247,7 @@ def create_detections(model, image, min_height=0, min_confidence=0.5):
 
 def run(sequence_dir, is_infrared, is_video, output_file, min_confidence,
         nms_max_overlap, min_detection_height, max_cosine_distance,
-        nn_budget, display):
+        nn_budget, display, fov):
     """Run multi-target tracker on a particular sequence.
 
     Parameters
@@ -304,6 +308,9 @@ def run(sequence_dir, is_infrared, is_video, output_file, min_confidence,
         }
     
     model = model_ir if is_infrared else model_rgb
+    fov_h = fov #horisontal
+    fov_v = calculate_vertical_fov(fov_h, seq_info["image_size"][1]/seq_info["image_size"][0]) #vertical
+    angular_offsets = []
 
     def frame_callback(vis, frame_idx):
         # Load image and generate detections.
@@ -344,6 +351,10 @@ def run(sequence_dir, is_infrared, is_video, output_file, min_confidence,
         tracker.predict()
         tracker.update(detections)
 
+        angular_offset = calculate_angular_offset(detections[0].tlwh[0]+detections[0].tlwh[2]/2, detections[0].tlwh[1]+detections[0].tlwh[3]/2, seq_info["image_size"][1], seq_info["image_size"][0], fov_h, fov_v)
+        nonlocal angular_offsets
+        angular_offsets.append(angular_offset)
+
         # Update visualization.
         if display:
             if not is_video:
@@ -381,6 +392,18 @@ def run(sequence_dir, is_infrared, is_video, output_file, min_confidence,
             row[0], row[1], row[2], row[3], row[4], row[5]),file=f)
     #print('%d' % (seq_info["max_frame_idx"]),file=f)
     f.close()
+
+    name, ext = os.path.splitext(output_file)
+    output_file = name + "_angular_offsets" + ext
+    with open(output_file, 'w') as f:
+        frame = 1
+        for x in angular_offsets:
+            f.write(str(frame))
+            f.write(',')
+            frame += 1
+            f.write(','.join([str(i) for i in x]))   
+            f.write('\n')
+
     if is_video:
         cap.release()
         #out.release()

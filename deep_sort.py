@@ -43,7 +43,8 @@ if __name__ == '__main__':
         min_detection_height=opt.min_detection_height,
         max_cosine_distance=opt.max_cosine_distance,
         nn_budget=opt.nn_budget,
-        display=True
+        display=True,
+        fov=opt.fov
     )
     
     #end = time.time() - start

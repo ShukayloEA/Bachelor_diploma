@@ -67,6 +67,12 @@ class opts:
             '--MC_lambda',
             default=0.98
         )
+        self.parser.add_argument(
+            '--fov',
+            default=46,
+            type=float,
+            help='fov of drone camera'
+        )
 
     def parse(self, args=''):
         if args == '':
