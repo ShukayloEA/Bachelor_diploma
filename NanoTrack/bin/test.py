@@ -154,10 +154,10 @@ def main():
             break
         idx += 1
 
-        if len(annotations) > 0 and idx < len(annotations):
-            gt_bbox = annotations[idx]
+        if len(annotations) > 0 and idx == annotations[idx-1][0]:
+            gt_bbox = annotations[idx-1]
         else:
-            gt_bbox = [idx, 1, width/2, height/2, 0, 0, 1]
+            gt_bbox = [idx, 1, width/2, height/2, 1, 1, 1]
 
         tic = cv2.getTickCount()
         if idx == 1:
