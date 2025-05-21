@@ -28,18 +28,19 @@ from angular_offset import calculate_angular_offset, calculate_vertical_fov
 from openvino.runtime import Core
 ie = Core()
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 # Load YOLO models
-weights_path_rgb = "exp22\\weights\\best_openvino_model\\best.xml"
+weights_path_rgb = "exp22\\weights\\best_openvino_model\\best.xml" #openvino_model_224_untrained\\yolov5s_224_untrained.xml" 
 #model_rgb = torch.load("C:\\Diploma\\yolov5\\runs\\train\\exp20\\weights\\best.pt", map_location="cpu")
 #model_rgb = torch.load(weights_path_rgb, map_location="cpu", weights_only=False)
 #weights_path_ir = "C:\\Diploma\\yolov5\\runs\\train\\exp18\\weights\\best.pt"
-weights_path_ir = "exp18\\weights\\best_openvino_model\\best.xml"
+weights_path_ir = "exp18\\weights\\best_openvino_model\\best.xml" #\\openvino_model_224_untrained\\yolov5s_224_untrained.xml" 
 #model_ir = torch.load("C:\\Diploma\\yolov5\\runs\\train\\exp8\\weights\\best.pt", map_location="cpu")
 #model_ir = torch.load(weights_path_ir, map_location="cpu", weights_only=False)
 model_ir = ie.compile_model(weights_path_ir, "CPU")
 model_rgb = ie.compile_model(weights_path_rgb, "CPU")
 #device = 'cpu'
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #model_rgb = DetectMultiBackend(weights_path_rgb, device=device)
 #model_ir = DetectMultiBackend(weights_path_ir, device=device)
 #model_rgb = torch.hub.load('ultralytics/yolov5', 'custom', path=weights_path_rgb)
@@ -50,7 +51,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #model_rgb.eval()
 #model_ir.eval()
 
-def scale_bbox(bbox, orig_shape, img_shape=(640, 640)):
+def scale_bbox(bbox, orig_shape, img_shape=(640, 640)): #img_shape=(224, 224)
     """ Преобразует bbox из YOLO-координат обратно в исходные размеры изображения. """
     img_w, img_h = img_shape
     orig_w, orig_h = orig_shape[::-1]
@@ -187,7 +188,7 @@ def create_detections(model, image, min_height=0, min_confidence=0.5):
 
     # Model selection
     #model = model_ir if is_infrared else model_rgb
-    image = cv2.resize(image, (640, 640))
+    image = cv2.resize(image, (640, 640)) #(224, 224)
     # Convert to tensor and normalize
     image = torch.tensor(image, dtype=torch.float32) / 255.0
 
@@ -347,11 +348,25 @@ def run(sequence_dir, is_infrared, is_video, output_file, min_confidence,
             boxes, nms_max_overlap, scores)
         detections = [detections[i] for i in indices]
 
+        print(f"[Frame {frame_idx}] Detections: {len(detections)}")
+
+
         # Update tracker.
         tracker.predict()
         tracker.update(detections)
 
-        angular_offset = calculate_angular_offset(detections[0].tlwh[0]+detections[0].tlwh[2]/2, detections[0].tlwh[1]+detections[0].tlwh[3]/2, seq_info["image_size"][1], seq_info["image_size"][0], fov_h, fov_v)
+        if len(detections) > 0:
+            angular_offset = calculate_angular_offset(
+                detections[0].tlwh[0]+detections[0].tlwh[2]/2,
+                detections[0].tlwh[1]+detections[0].tlwh[3]/2,
+                seq_info["image_size"][1],
+                seq_info["image_size"][0],
+                fov_h,
+                fov_v
+            )
+        else:
+            angular_offset = 0, 0
+        #angular_offset = calculate_angular_offset(detections[0].tlwh[0]+detections[0].tlwh[2]/2, detections[0].tlwh[1]+detections[0].tlwh[3]/2, seq_info["image_size"][1], seq_info["image_size"][0], fov_h, fov_v)
         nonlocal angular_offsets
         angular_offsets.append(angular_offset)
 

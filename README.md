@@ -15,6 +15,6 @@
    ```
 2. Далее выполните:
     ```bash
-   python .bin\test.py --vis  --fov 60
+   python bin\test.py --vis  --fov 60
    ```
 Где --vis - флаг визуализации, --fov - фов камеры.

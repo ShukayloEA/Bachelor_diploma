@@ -19,7 +19,7 @@ class TFLiteWrapper:
 
         print("Input details:")
         for detail in self.input_details:
-            print(f"  name: {detail['name']}, shape: {detail['shape']}")
+            print(f"  dtype: {detail['name']}, name: {detail['name']}, shape: {detail['shape']}")
 
 
     def _map_io_indices(self):

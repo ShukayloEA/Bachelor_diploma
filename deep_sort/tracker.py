@@ -92,30 +92,6 @@ class Tracker:
         self.metric.partial_fit(
             np.asarray(features), np.asarray(targets), active_targets)
 
-    def object_lost(self, detection_threshold=0.5):
-        """
-        Determine if any objects are lost based on the predicted position.
-        """
-        object_lost = False
-        if self.first_frame:
-            # В первый раз принудительно устанавливаем object_lost в True
-            object_lost = True
-            self.first_frame = False  # После первого кадра флаг сбрасывается
-            return object_lost
-
-        for track in self.tracks:
-            if track.is_confirmed() and track.time_since_update > 1:
-                predicted_position = track.kalman_filter.get_prediction()
-                current_position = track.get_current_position()
-
-                # Calculate Euclidean distance between predicted and current positions
-                distance = np.linalg.norm(np.array(predicted_position) - np.array(current_position))
-                if distance > detection_threshold:
-                    object_lost = True
-                    track.mark_missed()  # Mark the object as missed
-                    break  # Stop after finding the first lost object
-        return object_lost
-
     def _match(self, detections):
 
         def gated_metric(tracks, dets, track_indices, detection_indices):
